@@ -1,0 +1,21 @@
+<?php if ((defined('TL_SCRIPT') && strpos((string)TL_SCRIPT, 'contao') !== false) || (!empty($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '/contao') !== false)) { return; } ?>
+<?php
+  $setKey  = $GLOBALS['TL_CONFIG']['subcolumns'] ?? 'flex';
+  $type    = isset($this->fsc_type) && $this->fsc_type ? $this->fsc_type : '50x50';
+  $sets    = $GLOBALS['TL_SUBCL'][$setKey]['sets'] ?? [];
+  $map     = $sets[$type] ?? [];
+  $idx     = isset($this->fsc_sortid) ? (int)$this->fsc_sortid : 1;
+  $colIdx  = $idx;
+  $useInside = isset($this->useInside) ? $this->useInside : (bool)($GLOBALS['TL_SUBCL'][$setKey]['inside'] ?? false);
+  $inside  = isset($this->inside_class) && $this->inside_class ? $this->inside_class : ((isset($map[$colIdx][1]) && $map[$colIdx][1]) ? $map[$colIdx][1] : '');
+  $colClsRaw  = isset($this->col_class) && $this->col_class ? $this->col_class : ((isset($map[$colIdx][0]) && $map[$colIdx][0]) ? $map[$colIdx][0] : ('sc-flex__col sc-flex__col--1-2'));
+  $colCls     = trim($colClsRaw.' form-col');
+?>
+    <?php if (!empty($this->useInside) || $useInside): ?>
+      </div>
+    <?php endif; ?>
+  </div>
+  <div class="<?php echo trim($colCls.' '.($this->class ?? '')); ?>">
+    <?php if (($this->useInside ?? false) || $useInside): ?>
+      <?php if ($inside): ?><div class="<?php echo $inside; ?>"><?php endif; ?>
+    <?php endif; ?>

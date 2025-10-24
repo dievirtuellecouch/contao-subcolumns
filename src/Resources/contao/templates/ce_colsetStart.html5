@@ -1,0 +1,18 @@
+<?php if ((defined('TL_SCRIPT') && strpos((string)TL_SCRIPT, 'contao') !== false) || (!empty($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '/contao') !== false)) { return; } ?>
+<?php if (!defined('TL_MODE') || TL_MODE !== 'BE'): ?>
+<?php
+  $wrapId = '';
+  if (!empty($this->sc_wrap_id)) {
+    $wrapId = ' id="'.htmlspecialchars($this->sc_wrap_id, ENT_QUOTES).'"';
+  }
+  $wrapClass = trim(($this->sc_wrapper_class ?? '').' '.($this->sc_wrap_class ?? ''));
+
+  $colId = '';
+  if (!empty($this->cssID) && is_string($this->cssID) && preg_match('/ id=\"([^\"]*)\"/', $this->cssID, $m)) {
+    $colId = ' id="'.$m[1].'"';
+  }
+  $colClass = trim(($this->col_class ?? 'col col-1').' '.($this->class ?? ''));
+?>
+<section class="<?php echo $wrapClass; ?>"<?php echo $wrapId; ?><?php if (!empty($this->wrapper_style)): ?> style="<?php echo $this->wrapper_style; ?>"<?php elseif ($this->style): ?> style="<?php echo $this->style; ?>"<?php endif; ?>>
+  <div class="<?php echo $colClass; ?>"<?php echo $colId; ?>>
+<?php endif; ?>

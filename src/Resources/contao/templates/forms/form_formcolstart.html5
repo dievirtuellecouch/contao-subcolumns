@@ -1,0 +1,35 @@
+<?php if ((defined('TL_SCRIPT') && strpos((string)TL_SCRIPT, 'contao') !== false) || (!empty($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '/contao') !== false)) { return; } ?>
+<?php
+  $setKey  = $GLOBALS['TL_CONFIG']['subcolumns'] ?? 'flex';
+  $type    = isset($this->fsc_type) && $this->fsc_type ? $this->fsc_type : '50x50';
+  $sets    = $GLOBALS['TL_SUBCL'][$setKey]['sets'] ?? [];
+  $map     = $sets[$type] ?? [];
+  $scclass = $GLOBALS['TL_SUBCL'][$setKey]['scclass'] ?? 'sc-flex';
+  $wrapperBase = isset($this->sc_wrapper_class) && $this->sc_wrapper_class ? $this->sc_wrapper_class : trim($scclass.' colcount_'.(count($map) ?: 2).' '.$setKey.' col-'.$type);
+  $wrapper = trim($wrapperBase.' '.($this->fsc_wrap_class ?? ''));
+  $col0Raw = isset($this->col_class) && $this->col_class ? $this->col_class : ((isset($map[0][0]) && $map[0][0]) ? $map[0][0] : 'sc-flex__col sc-flex__col--1-2');
+  $col0    = trim($col0Raw.' form-col '.($this->class ?? ''));
+  $inside0 = isset($this->inside_class) && $this->inside_class ? $this->inside_class : ((isset($map[0][1]) && $map[0][1]) ? $map[0][1] : '');
+  $useInside = isset($this->useInside) ? $this->useInside : (bool)($GLOBALS['TL_SUBCL'][$setKey]['inside'] ?? false);
+  $styleInline = '';
+  if (!empty($this->wrapper_style)) {
+    $styleInline = (string)$this->wrapper_style;
+  } elseif (!empty($this->fsc_gapuse)) {
+    $gapVal = trim((string)($this->fsc_gap ?? ''));
+    if ($gapVal === '') {
+      $gapVal = (string)($GLOBALS['TL_CONFIG']['subcolumns_gapdefault'] ?? '20');
+    }
+    $gapInt = (int)$gapVal;
+    if ($gapInt < 0) { $gapInt = 0; }
+    $styleInline = '--sc-gap: '.$gapInt.'px; gap: '.$gapInt.'px';
+  }
+  // If a gap style is present, ensure the wrapper carries has-gap
+  if ($styleInline && strpos($wrapper, 'has-gap') === false) {
+    $wrapper .= ' has-gap';
+  }
+?>
+<section class="<?php echo trim('form-colset start '.$wrapper); ?>"<?php echo !empty($this->fsc_wrap_id) ? ' id="'.htmlspecialchars($this->fsc_wrap_id, ENT_QUOTES).'"' : ''; ?><?php echo $styleInline ? ' style="'.$styleInline.'"' : ''; ?>>
+  <div class="<?php echo $col0; ?>">
+    <?php if ($useInside && $inside0): ?>
+      <div class="<?php echo $inside0; ?>">
+    <?php endif; ?>
