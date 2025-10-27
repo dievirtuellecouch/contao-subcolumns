@@ -1,6 +1,6 @@
 {
   "name": "dievirtuellecouch/contao-subcolumns",
-  "description": "Subcolumns (Spaltenset) for Contao 5 – legacy compatible CE + form widgets",
+  "description": "Subcolumns (Spaltenset) for Contao 5.3 – legacy compatible CE + form widgets",
   "type": "contao-bundle",
   "version": "1.0.1",
   "license": "proprietary",
